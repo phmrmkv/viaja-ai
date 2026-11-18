@@ -1,4 +1,4 @@
-# PHMR Tech Solutions: site estático (Astro) na Hostinger
+# Viaja.ai: site estático (Astro) na Hostinger
 Options -Indexes
 DirectoryIndex index.html
 ErrorDocument 404 /404.html
@@ -31,6 +31,7 @@ AddType text/javascript .js .mjs
   ExpiresActive On
   # Favicons e og-image não têm hash: cache curto para trocas aparecerem logo
   ExpiresByType image/png "access plus 1 day"
+  ExpiresByType image/jpeg "access plus 1 day"
   ExpiresByType image/svg+xml "access plus 1 day"
   ExpiresByType image/x-icon "access plus 1 day"
   ExpiresByType text/plain "access plus 1 hour"

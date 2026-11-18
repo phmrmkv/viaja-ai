@@ -172,10 +172,6 @@ if (form) {
   const aviso = form.querySelector<HTMLElement>('[data-lista-aviso]');
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    if (!form.checkValidity()) {
-      form.reportValidity();
-      return;
-    }
     form.reset();
     if (aviso) aviso.hidden = false;
   });
