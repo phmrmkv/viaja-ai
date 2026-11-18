@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://caravan.libertycondominio.online/sitemap-index.xml
+Sitemap: https://viaja.libertycondominio.online/sitemap-index.xml

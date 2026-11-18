@@ -1,43 +1,38 @@
 ---
-// Login e aviso de demonstração em <dialog> nativo (sem React). O script em src/scripts/dialogos.ts
-// abre, fecha com animação, trata Esc e clique no fundo e devolve o foco ao elemento de origem.
-import Campo from '@/components/Campo.astro';
+const x = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"></path></svg>';
 ---
 
-<dialog class="dialogo" id="dialogo-login" aria-labelledby="login-titulo" aria-describedby="login-desc">
-  <div class="dialogo-corpo">
-    <button type="button" class="dialogo-fechar" data-fechar aria-label="Fechar">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18M6 6l12 12"></path></svg>
-    </button>
-    <h2 id="login-titulo" class="text-xl font-semibold">Entre na sua conta</h2>
-    <p id="login-desc" class="mt-1 text-sm text-muted-foreground">Demonstração: nada é enviado, não use dados reais.</p>
-    <form
-      data-demo-form
-      data-demo-titulo="Login de demonstração"
-      data-demo-msg="Este é um site de estudo: ninguém foi autenticado e nenhum dado foi enviado."
-      class="mt-5 grid gap-4"
-      aria-label="Login"
-    >
-      <Campo id="login-email" name="email" rotulo="E-mail" erroDe="o e-mail" tipo="email" regra="email" autocomplete="off" />
-      <Campo id="login-senha" name="senha" rotulo="Senha" erroDe="a senha" tipo="password" autocomplete="off" />
-      <p class="resumo-erro" role="alert" data-resumo></p>
-      <div class="flex flex-wrap items-center justify-between gap-3">
-        <p class="max-w-[14rem] text-sm text-muted-foreground">Esqueceu sua senha? Em um site real, haveria um link aqui.</p>
-        <button type="submit" class="press botao-primario inline-flex min-h-11 items-center justify-center rounded-lg px-5 font-medium">Entrar na conta</button>
-      </div>
-    </form>
+<dialog class="dlg" id="dlg-aviso" aria-labelledby="dlg-aviso-titulo" data-dlg>
+  <button type="button" class="dlg-fechar" aria-label="Fechar" data-fechar set:html={x} />
+  <div class="dlg-corpo">
+    <h2 id="dlg-aviso-titulo">A Viaja.ai ainda não abre para uso</h2>
+    <p>
+      O produto está em desenvolvimento e esta página é uma demonstração. Ainda não dá para criar roteiros de verdade.
+    </p>
+    <div class="dlg-acoes">
+      <button type="button" class="btn btn-primario" data-fechar>Entendi</button>
+    </div>
   </div>
 </dialog>
 
-<dialog class="dialogo" id="dialogo-demo" aria-labelledby="demo-titulo" aria-describedby="demo-msg">
-  <div class="dialogo-corpo">
-    <button type="button" class="dialogo-fechar" data-fechar aria-label="Fechar">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18M6 6l12 12"></path></svg>
-    </button>
-    <h2 id="demo-titulo" class="text-xl font-semibold">Demonstração</h2>
-    <p id="demo-msg" class="mt-2 text-muted-foreground"></p>
-    <div class="mt-6 flex justify-end">
-      <button type="button" data-fechar class="press botao-primario inline-flex min-h-11 items-center justify-center rounded-lg px-5 font-medium">Entendi</button>
-    </div>
+<dialog class="dlg" id="dlg-lista" aria-labelledby="dlg-lista-titulo" data-dlg>
+  <button type="button" class="dlg-fechar" aria-label="Fechar" data-fechar set:html={x} />
+  <div class="dlg-corpo">
+    <h2 id="dlg-lista-titulo">Lista de espera</h2>
+    <p>A lista ainda não existe de verdade. O formulário é parte da demonstração: nada é enviado nem guardado.</p>
+    <form method="dialog" data-form-lista>
+      <div class="campo">
+        <label for="lista-email">Seu e-mail</label>
+        <input id="lista-email" name="email" type="email" required autocomplete="email" inputmode="email" />
+        <small>Use um e-mail de teste, se quiser. Ele não sai do seu navegador.</small>
+      </div>
+      <p class="aviso-envio" role="status" data-lista-aviso hidden>
+        Nada foi enviado: isto é só uma demonstração.
+      </p>
+      <div class="dlg-acoes">
+        <button type="submit" class="btn btn-primario" data-lista-enviar>Entrar na lista</button>
+        <button type="button" class="btn btn-secundario" data-fechar>Fechar</button>
+      </div>
+    </form>
   </div>
 </dialog>

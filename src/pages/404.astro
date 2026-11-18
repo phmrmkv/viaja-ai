@@ -1,12 +1,17 @@
 ---
-import Layout from '@/layouts/Layout.astro';
+import Base from '@/layouts/Base.astro';
+import Cabecalho from '@/components/Cabecalho.astro';
+import Rodape from '@/components/Rodape.astro';
 ---
 
-<Layout title="Página não encontrada | Caravan" description="Esta página não existe no site de demonstração do Caravan." atual="" noindex>
-  <section class="mx-auto max-w-2xl px-4 py-24 text-center sm:px-6" aria-labelledby="titulo-404">
-    <p class="rotulo-topo">Erro 404</p>
-    <h1 id="titulo-404" class="titulo-pagina mt-2 text-primary">Página não encontrada</h1>
-    <p class="mt-4 text-lg text-muted-foreground">O endereço que você abriu não existe. Volte para o início e escolha o próximo destino.</p>
-    <a href="/" class="press botao-primario mt-8 inline-flex min-h-12 items-center rounded-lg px-7 text-lg font-medium">Voltar ao início</a>
+<Base title="Página não encontrada | Viaja.ai" description="Esta página não existe na demonstração da Viaja.ai." noindex>
+  <Cabecalho slot="topo" base="/" />
+  <section class="miolo pagina-erro" aria-labelledby="titulo-erro">
+    <div>
+      <h1 id="titulo-erro">Esse trajeto não leva a lugar nenhum</h1>
+      <p class="texto-secao">A página que você procurou não existe ou mudou de endereço. Volte ao início e recomece o roteiro.</p>
+      <p style="margin-top: 1.5rem"><a class="btn btn-primario" href="/">Voltar ao início</a></p>
+    </div>
   </section>
-</Layout>
+  <Rodape slot="rodape" />
+</Base>

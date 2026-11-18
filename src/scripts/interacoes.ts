@@ -1,11 +1,34 @@
-// Interações da página (docs/transicoes.md). Tudo aqui é melhoria: se este arquivo
-// não carregar, a página continua funcionando com links e CSS puros.
-import { avisarDemonstracao } from '@/lib/validacao';
+// Interações da página. Tudo aqui é melhoria: sem este arquivo a página continua
+// legível, com âncoras e CSS puros (docs/transicoes.md).
 
 const reduzido = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const raiz = document.documentElement;
 
-// Curva do sistema, cubic-bezier(0.22, 1, 0.36, 1), resolvida por Newton-Raphson
-// para a rolagem por JS seguir a mesma sensação das transições em CSS.
+/* ---------- Tema ---------- */
+const botaoTema = document.querySelector<HTMLButtonElement>('[data-tema-botao]');
+if (botaoTema) {
+  const sincronizar = () => {
+    const escuro = raiz.dataset.theme === 'dark';
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', escuro ? '#111215' : '#f4f4f2');
+    botaoTema.setAttribute('aria-label', (escuro ? botaoTema.dataset.rotuloClaro : botaoTema.dataset.rotuloEscuro) ?? '');
+  };
+  sincronizar();
+  new MutationObserver(sincronizar).observe(raiz, { attributes: true, attributeFilter: ['data-theme'] });
+  botaoTema.addEventListener('click', () => {
+    const proximo = raiz.dataset.theme === 'dark' ? 'light' : 'dark';
+    raiz.dataset.theme = proximo;
+    try {
+      localStorage.setItem('viaja-tema', proximo);
+    } catch {
+      /* sem armazenamento: a troca vale só nesta visita */
+    }
+  });
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'viaja-tema' && (e.newValue === 'dark' || e.newValue === 'light')) raiz.dataset.theme = e.newValue;
+  });
+}
+
+/* ---------- Rolagem suave das âncoras (curva do sistema) ---------- */
 function curvaSuave(t: number): number {
   const x1 = 0.22, y1 = 1, x2 = 0.36, y2 = 1;
   const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx;
@@ -32,7 +55,6 @@ function rolarAte(y: number, aoTerminar?: () => void) {
     aoTerminar?.();
     return;
   }
-  // 450 a 900 ms conforme a distância. Com movimento reduzido, continua suave, mas curta (300 ms).
   const duracao = reduzido() ? 300 : Math.min(900, Math.max(450, Math.abs(distancia) * 0.25));
   const t0 = performance.now();
   const passo = (agora: number) => {
@@ -43,30 +65,44 @@ function rolarAte(y: number, aoTerminar?: () => void) {
   };
   rolagemAtual = requestAnimationFrame(passo);
 }
-
 for (const ev of ['wheel', 'touchstart', 'keydown'] as const) {
   window.addEventListener(ev, () => cancelAnimationFrame(rolagemAtual), { passive: true });
 }
 
-// Âncoras internas (ex.: "Pular para o conteúdo"): rolagem suave com a curva do sistema e foco no destino.
+const menu = document.querySelector<HTMLDetailsElement>('[data-menu]');
+
 document.addEventListener('click', (e) => {
   if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-  const link = (e.target as Element | null)?.closest<HTMLAnchorElement>('a[href^="#"]');
-  if (!link) return;
+  const link = (e.target as Element | null)?.closest<HTMLAnchorElement>('a[href*="#"]');
+  if (!link || link.pathname !== location.pathname || !link.hash) return;
   const id = decodeURIComponent(link.hash.slice(1));
-  const alvo = id ? document.getElementById(id) : null;
+  const alvo = document.getElementById(id);
   if (!alvo) return;
   e.preventDefault();
+  if (menu?.open) menu.open = false;
   history.pushState(null, '', `#${id}`);
   const margem = parseFloat(getComputedStyle(alvo).scrollMarginTop) || 0;
-  const y = alvo.getBoundingClientRect().top + window.scrollY - margem;
+  const y = id === 'inicio' ? 0 : alvo.getBoundingClientRect().top + window.scrollY - margem;
   rolarAte(Math.max(0, y), () => {
     if (!alvo.hasAttribute('tabindex')) alvo.setAttribute('tabindex', '-1');
     alvo.focus({ preventScroll: true });
   });
 });
 
-// Cabeçalho: borda aparece quando a página sai do topo.
+/* ---------- Menu do celular: Esc fecha e devolve o foco ao botão ---------- */
+if (menu) {
+  menu.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menu.open) {
+      menu.open = false;
+      menu.querySelector('summary')?.focus();
+    }
+  });
+  document.addEventListener('click', (e) => {
+    if (menu.open && !menu.contains(e.target as Node)) menu.open = false;
+  });
+}
+
+/* ---------- Cabeçalho: borda ao rolar ---------- */
 const cabecalho = document.querySelector<HTMLElement>('[data-cabecalho]');
 if (cabecalho) {
   const marcar = () => (cabecalho.dataset.rolado = String(window.scrollY > 8));
@@ -74,12 +110,93 @@ if (cabecalho) {
   window.addEventListener('scroll', marcar, { passive: true });
 }
 
-// Botões que só mostram o aviso de demonstração (redes sociais, ingressos...).
-document.addEventListener('click', (e) => {
-  const botao = (e.target as Element | null)?.closest<HTMLElement>('[data-demo]');
-  if (!botao) return;
-  avisarDemonstracao(
-    botao.dataset.demoTitulo ?? 'Demonstração',
-    botao.dataset.demoMsg ?? 'Este é um site de estudo: não há nada real por trás deste botão.',
+/* ---------- Seção atual no menu ---------- */
+const nav = document.querySelector<HTMLElement>('[data-nav]');
+if (nav && 'IntersectionObserver' in window) {
+  const links = [...nav.querySelectorAll<HTMLAnchorElement>('a[href*="#"]')];
+  const secoes = links.map((a) => document.getElementById(a.hash.slice(1))).filter((s): s is HTMLElement => !!s);
+  const visiveis = new Set<string>();
+  const io = new IntersectionObserver(
+    (entradas) => {
+      entradas.forEach((en) => (en.isIntersecting ? visiveis.add(en.target.id) : visiveis.delete(en.target.id)));
+      const atual = secoes.find((s) => visiveis.has(s.id));
+      links.forEach((a) => (atual && a.hash === `#${atual.id}` ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current')));
+    },
+    { rootMargin: '-45% 0px -50% 0px' },
   );
+  secoes.forEach((s) => io.observe(s));
+}
+
+/* ---------- Diálogos nativos ---------- */
+const dialogos = document.querySelectorAll<HTMLDialogElement>('[data-dlg]');
+const origem = new WeakMap<HTMLDialogElement, HTMLElement>();
+
+function fechar(dlg: HTMLDialogElement) {
+  if (!dlg.open || dlg.classList.contains('fechando')) return;
+  const terminar = () => {
+    dlg.classList.remove('fechando');
+    dlg.close();
+    // O navegador já devolve o foco; repetimos para garantir em qualquer navegador.
+    origem.get(dlg)?.focus();
+  };
+  const dur = parseFloat(getComputedStyle(raiz).getPropertyValue('--dur-close')) || 150;
+  dlg.classList.add('fechando');
+  window.setTimeout(terminar, dur);
+}
+
+document.querySelectorAll<HTMLElement>('[data-abrir]').forEach((gatilho) => {
+  gatilho.addEventListener('click', () => {
+    const dlg = document.getElementById(gatilho.dataset.abrir ?? '') as HTMLDialogElement | null;
+    if (!dlg) return;
+    origem.set(dlg, gatilho);
+    dlg.showModal();
+  });
 });
+
+dialogos.forEach((dlg) => {
+  dlg.addEventListener('cancel', (e) => {
+    e.preventDefault(); // Esc: fecha com a animação
+    fechar(dlg);
+  });
+  // Clique no fundo: o alvo é o próprio <dialog> (o conteúdo fica num div interno).
+  dlg.addEventListener('click', (e) => {
+    if (e.target === dlg) fechar(dlg);
+  });
+  dlg.querySelectorAll<HTMLElement>('[data-fechar]').forEach((b) => b.addEventListener('click', () => fechar(dlg)));
+  dlg.addEventListener('close', () => origem.get(dlg)?.focus());
+});
+
+/* ---------- Lista de espera (demonstração: nada é enviado) ---------- */
+const form = document.querySelector<HTMLFormElement>('[data-form-lista]');
+if (form) {
+  const aviso = form.querySelector<HTMLElement>('[data-lista-aviso]');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+    form.reset();
+    if (aviso) aviso.hidden = false;
+  });
+  const dlg = form.closest('dialog');
+  dlg?.addEventListener('close', () => {
+    if (aviso) aviso.hidden = true;
+    form.reset();
+  });
+}
+
+/* ---------- Demonstração: "Chove no dia 2" ---------- */
+const demo = document.querySelector<HTMLElement>('[data-demo]');
+const botaoChuva = demo?.querySelector<HTMLButtonElement>('[data-demo-chuva]');
+const estado = demo?.querySelector<HTMLElement>('[data-demo-estado]');
+if (demo && botaoChuva && estado) {
+  botaoChuva.addEventListener('click', () => {
+    const chuva = demo.dataset.chuva !== 'true';
+    demo.dataset.chuva = String(chuva);
+    botaoChuva.setAttribute('aria-pressed', String(chuva));
+    estado.textContent = chuva
+      ? 'Plano refeito: o dia 2 troca o passeio ao ar livre por museus. Os outros dias ficam como estão.'
+      : 'Plano de volta ao original.';
+  });
+}

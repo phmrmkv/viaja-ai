@@ -1,63 +1,13 @@
 ---
-import { contato, site, cidades } from '@/data';
-
-const ano = 2017;
+import Logo from './Logo.astro';
 ---
 
-<footer class="mt-16 bg-faixa text-faixa-foreground">
-  <div class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-    <div class="grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-12">
-      <div class="md:col-span-3">
-        <h2 class="rotulo-topo !text-faixa-muted">Páginas</h2>
-        <ul class="mt-3 space-y-1">
-          <li><a class="link-faixa link-texto inline-flex min-h-11 items-center" href="/planos/">Planos</a></li>
-          <li><a class="link-faixa link-texto inline-flex min-h-11 items-center" href="/contato/">Contato</a></li>
-          <li><a class="link-faixa link-texto inline-flex min-h-11 items-center" href="/inscricao/">Inscreva-se</a></li>
-        </ul>
-      </div>
-      <div class="md:col-span-3">
-        <h2 class="rotulo-topo !text-faixa-muted">Locais</h2>
-        <ul class="mt-3 space-y-1">
-          {cidades.map((c) => <li><a class="link-faixa link-texto inline-flex min-h-11 items-center" href="/local/">{c}</a></li>)}
-        </ul>
-      </div>
-      <div class="col-span-2 md:col-span-4">
-        <h2 class="rotulo-topo !text-faixa-muted">Dados de contato</h2>
-        <ul class="mt-3 space-y-2 text-faixa-muted">
-          <li>{contato.email}</li>
-          <li>{contato.telefone}</li>
-          <li>{contato.horario}</li>
-        </ul>
-        <p class="mt-3 inline-block rounded-md border border-faixa-borda px-2.5 py-1 text-sm text-faixa-muted">
-          Demonstração: {contato.aviso}
-        </p>
-      </div>
-      <div class="col-span-2 md:col-span-2">
-        <h2 class="rotulo-topo !text-faixa-muted">Redes sociais</h2>
-        <ul class="mt-3 flex flex-wrap gap-2 md:flex-col md:items-start">
-          {
-            ['Facebook', 'Twitter', 'Youtube'].map((r) => (
-              <li>
-                <button
-                  type="button"
-                  class="press botao-faixa inline-flex min-h-11 min-w-32 items-center justify-center rounded-lg px-4 text-sm"
-                  data-demo
-                  data-demo-titulo="Rede social de demonstração"
-                  data-demo-msg={`O perfil no ${r} é fictício: este é um site de estudo e não há página real.`}>{r}</button>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </div>
-  </div>
-  <div class="bg-barra-baixa text-white">
-    <div class="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-4 text-center text-sm sm:px-6 md:flex-row md:items-center md:justify-between md:text-left">
-      <p>{site.nome} © {ano}. Alguns direitos reservados. Site de demonstração de estudo, sem atendimento real.</p>
-      <p>
-        Projeto de estudo de {site.autor} ·{' '}
-        <a href={site.urlAutor} rel="noopener" class="link-texto font-medium">{site.empresa}</a>
-      </p>
-    </div>
+<footer class="rodape">
+  <div class="miolo rodape-grade">
+    <Logo />
+    <p>Produto em desenvolvimento pela PHMR Tech Solutions. Esta página é uma demonstração.</p>
+    <p class="rodape-credito">
+      Projeto de Paulo H. M. Rabelo ·{' '}<a href="https://phmr.libertycondominio.online" rel="noopener">PHMR Tech Solutions</a>
+    </p>
   </div>
 </footer>

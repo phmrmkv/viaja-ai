@@ -1,4 +1,4 @@
-# Guia de transições — ServiSindicância
+# Guia de transições — Viaja.ai (copiado do guia do ServiSindicância)
 
 Base: transitions.dev (lido em 2026-11-17) + conhecimento geral, sempre marcado. O site não publica uma página de "princípios" nem de "durações/easing" em texto corrido; os valores vêm dos **tokens de cada transição** (páginas `/transitions/<nome>/`). Quando algo é nosso (não do site), está marcado como "(conhecimento geral, não está no transitions.dev)".
 

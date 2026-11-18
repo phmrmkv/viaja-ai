@@ -1,14 +1,13 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://caravan.libertycondominio.online',
+  site: 'https://viaja.libertycondominio.online',
   output: 'static',
-  integrations: [react(), sitemap()],
+  integrations: [sitemap({ filter: (pagina) => !pagina.includes('/404') })],
   vite: {
     plugins: [tailwindcss()],
   },

@@ -1,0 +1,72 @@
+---
+// Demonstração visual do roteiro: texto escrito à mão, ilustrativo. Não vem de um produto em uso.
+---
+
+<section class="demo" data-demo data-chuva="false" aria-labelledby="demo-titulo">
+  <div class="demo-topo">
+    <span id="demo-titulo">Roteiro de exemplo</span>
+    <span>Ilustrativo</span>
+  </div>
+  <div class="demo-corpo">
+    <p class="demo-pedido">
+      <strong>Pedido:</strong> Lisboa, 3 dias em março, R$ 6.000 no total, ritmo tranquilo. Gosto de comer bem e de andar a pé.
+    </p>
+
+    <ol class="trajeto">
+      <li class="parada-dia">
+        <h3 class="dia-titulo"><small>Dia 1</small>Alfama e o rio</h3>
+        <ul class="dia-lista">
+          <li><span>Manhã</span><span>Miradouro de Santa Luzia e ruas de Alfama</span></li>
+          <li><span>Tarde</span><span>Castelo de São Jorge, sem pressa</span></li>
+          <li><span>Noite</span><span>Jantar perto do rio</span></li>
+        </ul>
+      </li>
+      <li class="parada-dia">
+        <div class="dia2-troca" data-dia2-sol>
+          <h3 class="dia-titulo"><small>Dia 2</small>Belém ao ar livre</h3>
+          <ul class="dia-lista">
+            <li><span>Manhã</span><span>Mosteiro dos Jerónimos</span></li>
+            <li><span>Tarde</span><span>Passeio à beira do Tejo e pastéis</span></li>
+            <li><span>Noite</span><span>Pôr do sol em um miradouro</span></li>
+          </ul>
+        </div>
+        <div class="dia2-troca" data-dia2-chuva>
+          <h3 class="dia-titulo"><small>Dia 2</small>Belém e museus</h3>
+          <ul class="dia-lista">
+            <li><span>Manhã</span><span>Mosteiro dos Jerónimos (parte coberta)</span></li>
+            <li><span>Tarde</span><span>Museu Nacional do Azulejo</span></li>
+            <li><span>Noite</span><span>Jantar com mesa reservada</span></li>
+          </ul>
+        </div>
+      </li>
+      <li class="parada-dia">
+        <h3 class="dia-titulo"><small>Dia 3</small>Mercados e bairros</h3>
+        <ul class="dia-lista">
+          <li><span>Manhã</span><span>Mercado da Ribeira</span></li>
+          <li><span>Tarde</span><span>LX Factory e livrarias</span></li>
+          <li><span>Noite</span><span>Bairro Alto, com calma</span></li>
+        </ul>
+      </li>
+    </ol>
+
+    <dl class="demo-fatos">
+      <div><dt>Onde ficar</dt><dd>Baixa ou Alfama, para ir a pé</dd></div>
+      <div>
+        <dt>Na mala</dt>
+        <dd>
+          <span data-mala-sol>Casaco leve e tênis confortável</span>
+          <span data-mala-chuva>Capa de chuva e tênis que aguente molhado</span>
+        </dd>
+      </div>
+    </dl>
+
+    <div class="demo-acao">
+      <button type="button" class="demo-chuva" aria-pressed="false" data-demo-chuva>Chove no dia 2</button>
+      <p class="demo-estado" role="status" data-demo-estado></p>
+    </div>
+
+    <p class="demo-nota">
+      Exemplo escrito à mão para esta página. Não foi gerado por um produto em uso e não traz preços nem horários reais.
+    </p>
+  </div>
+</section>

@@ -1,11 +1,17 @@
 ---
-// Logo original do Caravan (img/caravan.svg) embutida, para herdar a cor do texto nos dois temas.
-import bruto from '@/assets/caravan.svg?raw';
-
+// Logo tipográfico PROVISÓRIO: marca (placa com duas paradas ligadas por um trajeto) + nome.
 interface Props {
-  class?: string;
+  href?: string;
 }
-const svg = bruto.replace(/<svg /, '<svg fill="currentColor" aria-hidden="true" focusable="false" class="h-7 w-auto" ');
+const { href = '/' } = Astro.props;
 ---
 
-<span class:list={['inline-flex', Astro.props.class]} set:html={svg} />
+<a class="logo" href={href} aria-label="Viaja.ai, início">
+  <svg class="logo-marca" width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true" focusable="false">
+    <rect class="placa" x="1" y="1" width="30" height="30" rx="8"></rect>
+    <path class="trajeto" d="M9.5 22.5C9.5 15 22.5 17 22.5 9.5" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="0.1 4.2"></path>
+    <circle class="parada" cx="9.5" cy="22.5" r="3.6" stroke-width="2"></circle>
+    <circle class="parada" cx="22.5" cy="9.5" r="3.6" stroke-width="2"></circle>
+  </svg>
+  <span class="logo-texto" aria-hidden="true">Viaja<span>.ai</span></span>
+</a>
