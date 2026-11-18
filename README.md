@@ -26,4 +26,4 @@ O logo é tipográfico e provisório. Para regenerar favicon, ícone e `og-image
 
 ## Hospedagem
 
-Site estático em `https://viaja.libertycondominio.online` (Hostinger). Publicar o conteúdo de `dist/`; `public/.htaccess` cuida de HTTPS, cabeçalhos de segurança e cache.
+Site estático em `https://viaja.phmr.com.br` (Hostinger). Publicar o conteúdo de `dist/`; `public/.htaccess` cuida de HTTPS, cabeçalhos de segurança e cache.

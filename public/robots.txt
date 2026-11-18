@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://viaja.libertycondominio.online/sitemap-index.xml
+Sitemap: https://viaja.phmr.com.br/sitemap-index.xml

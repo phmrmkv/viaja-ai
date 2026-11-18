@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://viaja.libertycondominio.online',
+  site: 'https://viaja.phmr.com.br',
   output: 'static',
   integrations: [sitemap({ filter: (pagina) => !pagina.includes('/404') })],
   vite: {
