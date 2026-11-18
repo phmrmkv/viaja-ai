@@ -1,0 +1,43 @@
+---
+// Login e aviso de demonstração em <dialog> nativo (sem React). O script em src/scripts/dialogos.ts
+// abre, fecha com animação, trata Esc e clique no fundo e devolve o foco ao elemento de origem.
+import Campo from '@/components/Campo.astro';
+---
+
+<dialog class="dialogo" id="dialogo-login" aria-labelledby="login-titulo" aria-describedby="login-desc">
+  <div class="dialogo-corpo">
+    <button type="button" class="dialogo-fechar" data-fechar aria-label="Fechar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18M6 6l12 12"></path></svg>
+    </button>
+    <h2 id="login-titulo" class="text-xl font-semibold">Entre na sua conta</h2>
+    <p id="login-desc" class="mt-1 text-sm text-muted-foreground">Demonstração: nada é enviado, não use dados reais.</p>
+    <form
+      data-demo-form
+      data-demo-titulo="Login de demonstração"
+      data-demo-msg="Este é um site de estudo: ninguém foi autenticado e nenhum dado foi enviado."
+      class="mt-5 grid gap-4"
+      aria-label="Login"
+    >
+      <Campo id="login-email" name="email" rotulo="E-mail" erroDe="o e-mail" tipo="email" regra="email" autocomplete="off" />
+      <Campo id="login-senha" name="senha" rotulo="Senha" erroDe="a senha" tipo="password" autocomplete="off" />
+      <p class="resumo-erro" role="alert" data-resumo></p>
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <p class="max-w-[14rem] text-sm text-muted-foreground">Esqueceu sua senha? Em um site real, haveria um link aqui.</p>
+        <button type="submit" class="press botao-primario inline-flex min-h-11 items-center justify-center rounded-lg px-5 font-medium">Entrar na conta</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<dialog class="dialogo" id="dialogo-demo" aria-labelledby="demo-titulo" aria-describedby="demo-msg">
+  <div class="dialogo-corpo">
+    <button type="button" class="dialogo-fechar" data-fechar aria-label="Fechar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18M6 6l12 12"></path></svg>
+    </button>
+    <h2 id="demo-titulo" class="text-xl font-semibold">Demonstração</h2>
+    <p id="demo-msg" class="mt-2 text-muted-foreground"></p>
+    <div class="mt-6 flex justify-end">
+      <button type="button" data-fechar class="press botao-primario inline-flex min-h-11 items-center justify-center rounded-lg px-5 font-medium">Entendi</button>
+    </div>
+  </div>
+</dialog>

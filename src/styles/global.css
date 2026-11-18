@@ -161,17 +161,9 @@
 /* As regras abaixo ficam fora de @layer de propósito: assim vencem as
    utilitárias do tw-animate-css sem precisar de !important. */
 
-[data-slot="dialog-content"][data-state="open"] {
-  animation: dlg-in var(--dur-open) var(--ease-out-soft);
-}
-[data-slot="dialog-content"][data-state="closed"] {
-  animation: dlg-out var(--dur-close) var(--ease-out-soft) forwards;
-}
-[data-slot="dialog-overlay"][data-state="open"],
 [data-slot="sheet-overlay"][data-state="open"] {
   animation: fade-in-soft var(--dur-open) var(--ease-out-soft);
 }
-[data-slot="dialog-overlay"][data-state="closed"],
 [data-slot="sheet-overlay"][data-state="closed"] {
   animation: fade-out-soft var(--dur-close) var(--ease-out-soft) forwards;
 }
@@ -200,6 +192,33 @@
 @keyframes sheet-out {
   to { transform: translateX(100%); }
 }
+
+/* Diálogos nativos (<dialog>): abre 250 ms, fecha 150 ms; o fundo é o ::backdrop */
+.dialogo {
+  margin: auto;
+  width: min(28rem, calc(100vw - 2rem));
+  max-height: calc(100dvh - 2rem);
+  padding: 0;
+  overflow: auto;
+  color: var(--popover-foreground);
+  background: var(--popover);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 50px -12px rgb(0 0 0 / 0.35);
+}
+.dialogo::backdrop { background: rgb(0 0 0 / 0.5); }
+.dialogo-corpo { position: relative; padding: 1.5rem; }
+.dialogo-fechar {
+  position: absolute; top: 0.5rem; right: 0.5rem;
+  display: inline-flex; align-items: center; justify-content: center; width: 2.75rem; height: 2.75rem;
+  border-radius: 999px; color: var(--muted-foreground);
+  transition: background-color var(--dur-hover-fast) var(--ease-out-soft), color var(--dur-hover-fast) var(--ease-out-soft);
+}
+.dialogo-fechar:hover { background: var(--accent); color: var(--foreground); }
+.dialogo[open] { animation: dlg-in var(--dur-open) var(--ease-out-soft); }
+.dialogo[open]::backdrop { animation: fade-in-soft var(--dur-open) var(--ease-out-soft); }
+.dialogo[open][data-fechando] { animation: dlg-out var(--dur-close) var(--ease-out-soft) forwards; }
+.dialogo[open][data-fechando]::backdrop { animation: fade-out-soft var(--dur-close) var(--ease-out-soft) forwards; }
 
 /* Reveal ao rolar: só existe com JS (classe .js no <html>), então sem JS
    o conteúdo aparece normalmente. Anima uma vez, escalonamento de 40 ms.
@@ -255,9 +274,7 @@
     transition: opacity var(--dur-enter) var(--ease-out-soft);
     transition-delay: 0ms;
   }
-  [data-slot="dialog-content"][data-state="open"],
   [data-slot="sheet-content"][data-state="open"] { animation: fade-in-soft var(--dur-open) var(--ease-out-soft); }
-  [data-slot="dialog-content"][data-state="closed"],
   [data-slot="sheet-content"][data-state="closed"] { animation: fade-out-soft var(--dur-close) var(--ease-out-soft) forwards; }
   [data-slot="sheet-content"][data-state="open"] .menu-item { animation: fade-in-soft var(--dur-open) var(--ease-out-soft) both; }
 }
@@ -510,4 +527,9 @@ textarea.campo-entrada { min-height: 7.5rem; resize: vertical; }
   .campo-tremida { animation: none; }
   .js .carrossel-slide { transition-duration: 250ms, 0s; transition-delay: 0s, 250ms; }
   .js .carrossel-slide[data-ativo="true"] { transition-delay: 0s, 0s; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialogo[open] { animation: fade-in-soft var(--dur-open) var(--ease-out-soft); }
+  .dialogo[open][data-fechando] { animation: fade-out-soft var(--dur-close) var(--ease-out-soft) forwards; }
 }

@@ -41,15 +41,12 @@ export function mensagemDeErro(
   }
 }
 
-/** Dispara o aviso de demonstração (Dialog em src/components/Dialogos.tsx). */
+/** Dispara o aviso de demonstração (diálogo nativo em src/scripts/dialogos.ts). */
 export function avisarDemonstracao(titulo: string, mensagem: string) {
-  const w = window as unknown as { __caravanDemo?: { titulo: string; mensagem: string } | null };
-  w.__caravanDemo = { titulo, mensagem };
   window.dispatchEvent(new CustomEvent('caravan:demo', { detail: { titulo, mensagem } }));
 }
 
-export function abrirLogin() {
-  const w = window as unknown as { __caravanLogin?: boolean };
-  w.__caravanLogin = true;
-  window.dispatchEvent(new CustomEvent('caravan:login'));
+/** Abre o Login; origem é o elemento que recebe o foco ao fechar. */
+export function abrirLogin(origem?: HTMLElement | null) {
+  window.dispatchEvent(new CustomEvent('caravan:login', { detail: { origem } }));
 }

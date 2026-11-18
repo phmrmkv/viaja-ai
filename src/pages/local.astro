@@ -68,9 +68,12 @@ const colunas = [
       <p class="rotulo-topo">Descubra o que acontece na cidade</p>
       <h2 id="titulo-eventos" class="titulo-pagina mt-2 text-primary">Próximos eventos</h2>
     </div>
+    <p class="mx-auto mb-4 max-w-3xl rounded-lg border border-border bg-card px-4 py-3 text-center text-sm text-muted-foreground" data-reveal>
+      Demonstração: os eventos abaixo são fictícios e não há venda de ingressos.
+    </p>
     <div data-reveal>
       <table class="tabela-eventos w-full border-collapse text-left">
-        <caption class="sr-only">Agenda de eventos em Dublin (dados de exemplo)</caption>
+        <caption class="sr-only">Agenda de eventos fictícios em Dublin</caption>
         <thead>
           <tr class="border-b-2 border-border">
             <th scope="col" class="px-2 py-3 text-sm font-semibold sm:px-4">Data</th>
@@ -90,9 +93,10 @@ const colunas = [
                   <button
                     type="button"
                     class="press botao-contorno-neutro inline-flex min-h-11 items-center rounded-lg px-3 text-sm font-medium"
+                    aria-label={`Comprar ticket: ${e.evento} em ${e.data}`}
                     data-demo
                     data-demo-titulo="Ingresso de demonstração"
-                    data-demo-msg={`O evento de ${e.data} é um exemplo: este site de estudo não vende ingressos.`}>
+                    data-demo-msg={`O evento de ${e.data} é fictício: este site de estudo não vende ingressos.`}>
                     Comprar ticket
                   </button>
                 </td>

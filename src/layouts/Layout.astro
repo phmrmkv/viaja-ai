@@ -3,7 +3,7 @@ import '@fontsource-variable/inter';
 import '@/styles/global.css';
 import Cabecalho from '@/components/Cabecalho.astro';
 import Rodape from '@/components/Rodape.astro';
-import Dialogos from '@/components/Dialogos';
+import Dialogos from '@/components/Dialogos.astro';
 
 interface Props {
   title: string;
@@ -35,7 +35,8 @@ const imagem = new URL('/og-image.jpg', Astro.site);
         function mudou(e) {
           if (!salvo()) d.dataset.theme = e.matches ? 'dark' : 'light';
         }
-        m.addEventListener('change', mudou);
+        if (m.addEventListener) m.addEventListener('change', mudou);
+        else if (m.addListener) m.addListener(mudou);
         d.classList.add('js');
       })();
     </script>
@@ -73,9 +74,10 @@ const imagem = new URL('/og-image.jpg', Astro.site);
       <slot />
     </main>
     <Rodape />
-    <Dialogos client:load />
+    <Dialogos />
     <script>
       import '@/scripts/interacoes';
+      import '@/scripts/dialogos';
       import '@/scripts/formularios';
     </script>
     <script is:inline>

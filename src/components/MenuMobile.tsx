@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Menu } from 'lucide-react';
 import {
   Sheet,
@@ -14,10 +14,12 @@ type Link = { href: string; texto: string };
 
 export default function MenuMobile({ links, atual }: { links: Link[]; atual: string }) {
   const [aberto, setAberto] = useState(false);
+  const gatilho = useRef<HTMLButtonElement>(null);
 
   return (
     <Sheet open={aberto} onOpenChange={setAberto}>
       <SheetTrigger
+        ref={gatilho}
         className="press -mr-2 inline-flex size-11 items-center justify-center rounded-full text-foreground hover:bg-accent"
         aria-label="Abrir menu"
       >
@@ -27,7 +29,6 @@ export default function MenuMobile({ links, atual }: { links: Link[]; atual: str
         side="right"
         rotuloFechar="Fechar menu"
         className="w-[82vw] max-w-sm gap-0 px-2"
-        onCloseAutoFocus={(e) => e.preventDefault()}
       >
         <SheetHeader className="px-4 pt-6">
           <SheetTitle className="text-left text-lg font-semibold">Menu</SheetTitle>
@@ -51,7 +52,8 @@ export default function MenuMobile({ links, atual }: { links: Link[]; atual: str
                 type="button"
                 onClick={() => {
                   setAberto(false);
-                  window.setTimeout(abrirLogin, 180);
+                  // o foco volta ao botão do menu; o Login herda esse botão como origem
+                  window.setTimeout(() => abrirLogin(gatilho.current), 300);
                 }}
                 className="link-menu flex min-h-12 w-full items-center rounded-xl px-3 text-left text-xl font-medium tracking-tight"
               >

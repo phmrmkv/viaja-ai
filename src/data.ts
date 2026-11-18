@@ -8,10 +8,11 @@ export const site = {
 };
 
 export const contato = {
-  email: 'caravan@caravan.com.br',
+  email: 'caravan@exemplo.com.br',
   telefone: '21 99999-9999',
-  horario: 'De Seg. à Sex. das 8h às 18h',
+  horario: 'De seg. a sex., das 8h às 18h',
   aviso: 'Contatos fictícios, só para demonstração.',
+  endereco: 'Rua de Exemplo, 123, Centro, Cidade de Exemplo',
 };
 
 export const paginas = [
@@ -20,7 +21,7 @@ export const paginas = [
   { href: '/contato/', texto: 'Contato' },
 ];
 
-export const cidades = ['California', 'Paris', 'Dublin'];
+export const cidades = ['Califórnia', 'Paris', 'Dublin'];
 
 export const planos = {
   gold: {
@@ -72,14 +73,12 @@ export const perguntas = [
   },
 ];
 
-export const eventos = [
-  { data: '23/10', evento: 'Julien Baker', local: 'The Academy' },
-  { data: '25/10', evento: 'Julien Baker', local: 'The Academy' },
-  { data: '30/10', evento: 'Julien Baker', local: 'The Academy' },
-  { data: '02/11', evento: 'Julien Baker', local: 'The Academy' },
-  { data: '08/11', evento: 'Julien Baker', local: 'The Academy' },
-  { data: '14/11', evento: 'Julien Baker', local: 'The Academy' },
-];
+// Eventos fictícios, só para preencher a agenda da demonstração.
+export const eventos = ['23/10', '25/10', '30/10', '02/11', '08/11', '14/11'].map((data) => ({
+  data,
+  evento: 'Show de exemplo',
+  local: 'Local de exemplo',
+}));
 
 export const vantagens = [
   { icone: 'passaporte', titulo: 'Documentos', texto: 'Ajuda com passaporte, vistos e a papelada da viagem.' },
