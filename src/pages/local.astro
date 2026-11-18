@@ -1,0 +1,106 @@
+---
+import { Picture } from 'astro:assets';
+import Layout from '@/layouts/Layout.astro';
+import { eventos } from '@/data';
+import foto1 from '@/assets/local/foto-1.jpg';
+import foto2 from '@/assets/local/foto-2.jpg';
+import foto3 from '@/assets/local/foto-3.jpg';
+import foto4 from '@/assets/local/foto-4.jpg';
+import foto5 from '@/assets/local/foto-5.jpg';
+import foto6 from '@/assets/local/foto-6.jpg';
+import foto7 from '@/assets/local/foto-7.jpg';
+
+const colunas = [
+  [
+    { img: foto1, alt: 'Costa de rochas escuras banhadas pelo mar ao entardecer' },
+    { img: foto2, alt: 'Letreiro de neon vermelho do pub Temple Bar à noite' },
+    { img: foto3, alt: 'Músico de barba branca tocando violão diante de um farol vermelho' },
+  ],
+  [
+    { img: foto4, alt: 'Rua de paralelepípedos com prédios de tijolos e um pub' },
+    { img: foto5, alt: 'Cartaz com a frase “I fell in love here” num bar de paredes estofadas' },
+  ],
+  [
+    { img: foto6, alt: 'Biblioteca antiga com prateleiras altas e bustos de mármore' },
+    { img: foto7, alt: 'Formações de rocha hexagonais numa encosta verde' },
+  ],
+];
+---
+
+<Layout
+  title="Descubra Dublin | Caravan"
+  description="Fotos de Dublin e a agenda dos próximos eventos na cidade. Conteúdo de demonstração do site Caravan."
+  atual="/local/"
+>
+  <section class="mx-auto max-w-6xl px-4 sm:px-6" aria-labelledby="titulo-local">
+    <div class="my-12 text-center" data-reveal>
+      <p class="rotulo-topo">O melhor destino da sua viagem</p>
+      <h1 id="titulo-local" class="titulo-pagina mt-2 text-primary">Descubra Dublin</h1>
+    </div>
+    <div class="grid gap-4 md:grid-cols-3">
+      {
+        colunas.map((col, c) => (
+          <div class="flex flex-col gap-4">
+            {col.map((f, i) => (
+              <div class="foto-moldura" data-reveal style={`--i: ${i}`}>
+                <Picture
+                  src={f.img}
+                  alt={f.alt}
+                  formats={['avif', 'webp']}
+                  fallbackFormat="jpg"
+                  widths={[400, 700, 1000]}
+                  sizes="(min-width: 1152px) 368px, (min-width: 768px) 33vw, 100vw"
+                  quality={70}
+                  loading={c === 0 && i === 0 ? 'eager' : 'lazy'}
+                  class="block h-auto w-full"
+                  pictureAttributes={{ class: 'contents' }}
+                />
+              </div>
+            ))}
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-4 sm:px-6" aria-labelledby="titulo-eventos">
+    <div class="my-12 text-center" data-reveal>
+      <p class="rotulo-topo">Descubra o que acontece na cidade</p>
+      <h2 id="titulo-eventos" class="titulo-pagina mt-2 text-primary">Próximos eventos</h2>
+    </div>
+    <div data-reveal>
+      <table class="tabela-eventos w-full border-collapse text-left">
+        <caption class="sr-only">Agenda de eventos em Dublin (dados de exemplo)</caption>
+        <thead>
+          <tr class="border-b-2 border-border">
+            <th scope="col" class="px-2 py-3 text-sm font-semibold sm:px-4">Data</th>
+            <th scope="col" class="px-2 py-3 text-sm font-semibold sm:px-4">Evento</th>
+            <th scope="col" class="px-2 py-3 text-sm font-semibold sm:px-4">Local</th>
+            <th scope="col" class="px-2 py-3 text-sm font-semibold sm:px-4">Ticket</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            eventos.map((e) => (
+              <tr class="border-b border-border">
+                <th scope="row" class="px-2 py-2 text-sm font-semibold sm:px-4 sm:text-base">{e.data}</th>
+                <td class="px-2 py-2 text-sm sm:px-4 sm:text-base">{e.evento}</td>
+                <td class="px-2 py-2 text-sm sm:px-4 sm:text-base">{e.local}</td>
+                <td class="px-2 py-2 sm:px-4">
+                  <button
+                    type="button"
+                    class="press botao-contorno-neutro inline-flex min-h-11 items-center rounded-lg px-3 text-sm font-medium"
+                    data-demo
+                    data-demo-titulo="Ingresso de demonstração"
+                    data-demo-msg={`O evento de ${e.data} é um exemplo: este site de estudo não vende ingressos.`}>
+                    Comprar ticket
+                  </button>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+</Layout>

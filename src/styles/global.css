@@ -1,0 +1,513 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+/* Tema claro no :root; o escuro vem logo abaixo, em :root[data-theme="dark"].
+   Identidade herdada do Caravan original (Bootstrap 4): azul de destaque, faixas
+   escuras #343a40, superfícies #f8f9fa, cinza secundário. O azul #007bff dava só
+   4:1 com texto branco; usamos #0062cc (o próprio tom de hover do Bootstrap, 5,8:1). */
+:root {
+  color-scheme: light;
+  --radius: 0.75rem;
+
+  --background: #ffffff;
+  --foreground: #212529;
+  --card: #f8f9fa;
+  --card-foreground: #212529;
+  --popover: #ffffff;
+  --popover-foreground: #212529;
+  --primary: #0062cc;
+  --primary-foreground: #ffffff;
+  --primary-hover: #0056b3;
+  --secondary: #f8f9fa;
+  --secondary-foreground: #212529;
+  --muted: #f8f9fa;
+  --muted-foreground: #5c636a;
+  --accent: #e9ecef;
+  --accent-foreground: #212529;
+  --destructive: #b02a37;
+  --border: #dee2e6;
+  --input: #868e96; /* 3,3:1 sobre branco: borda de campo visível */
+  --ring: #0062cc;
+
+  /* Faixas escuras (hero, rodapé) */
+  --faixa: #343a40;
+  --faixa-foreground: #ffffff;
+  --faixa-muted: #ced4da;
+  --faixa-link: #8ec5ff;
+  --faixa-erro: #ffb3ba;
+  --faixa-borda: #5c636a;
+  --barra-baixa: #0062cc; /* faixa azul no fim do rodapé */
+  --sucesso: #1e7e34;
+  --sucesso-foreground: #ffffff;
+  --icone: #0062cc;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --background: #12161a;
+  --foreground: #e9ecef;
+  --card: #1b2127;
+  --card-foreground: #e9ecef;
+  --popover: #1b2127;
+  --popover-foreground: #e9ecef;
+  --primary: #4da3ff;
+  --primary-foreground: #0b1b2e;
+  --primary-hover: #7ab8ff;
+  --secondary: #1b2127;
+  --secondary-foreground: #e9ecef;
+  --muted: #1b2127;
+  --muted-foreground: #adb5bd;
+  --accent: #262d35;
+  --accent-foreground: #e9ecef;
+  --destructive: #ff8a93;
+  --border: #2d353d;
+  --input: #6c757d; /* 3,9:1 sobre o fundo, 3,5:1 sobre o cartão */
+  --ring: #6cb2ff;
+
+  --faixa: #0c0f12;
+  --faixa-foreground: #ffffff;
+  --faixa-muted: #adb5bd;
+  --faixa-link: #8ec5ff;
+  --faixa-erro: #ffb3ba;
+  --faixa-borda: #495057;
+  --barra-baixa: #0b4f9c;
+  --sucesso: #5fd37a;
+  --sucesso-foreground: #0b1f10;
+  --icone: #6cb2ff;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-faixa: var(--faixa);
+  --color-faixa-foreground: var(--faixa-foreground);
+  --color-faixa-muted: var(--faixa-muted);
+  --color-faixa-link: var(--faixa-link);
+  --color-faixa-erro: var(--faixa-erro);
+  --color-barra-baixa: var(--barra-baixa);
+  --color-sucesso: var(--sucesso);
+  --color-sucesso-foreground: var(--sucesso-foreground);
+  --color-icone: var(--icone);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter Variable", "Inter", system-ui, "Segoe UI", Roboto, sans-serif;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Transições: tokens do guia docs/transicoes.md
+   Curva única do site: cubic-bezier(0.22, 1, 0.36, 1). Fechar é mais rápido que abrir.
+------------------------------------------------------------------- */
+:root {
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-quick: cubic-bezier(0.4, 0, 1, 1);
+
+  --dur-enter: 400ms;
+  --dur-enter-text: 500ms;
+  --dur-stagger: 40ms;
+  --distance-enter: 12px;
+  --blur-enter: 2px;
+
+  --dur-hover: 350ms;
+  --dur-hover-fast: 150ms;
+  --dur-press: 100ms;
+  --press-scale: 0.97;
+
+  --dur-layout: 250ms;
+  --dur-header: 250ms;
+
+  --dur-open: 250ms;
+  --dur-close: 150ms;
+  --modal-scale: 0.96;
+
+  --dur-shake: 280ms;
+  --shake-distance: 6px;
+  --dur-slide: 500ms;
+  --lift: -3px;
+  --nudge: 2px;
+}
+
+/* As regras abaixo ficam fora de @layer de propósito: assim vencem as
+   utilitárias do tw-animate-css sem precisar de !important. */
+
+[data-slot="dialog-content"][data-state="open"] {
+  animation: dlg-in var(--dur-open) var(--ease-out-soft);
+}
+[data-slot="dialog-content"][data-state="closed"] {
+  animation: dlg-out var(--dur-close) var(--ease-out-soft) forwards;
+}
+[data-slot="dialog-overlay"][data-state="open"],
+[data-slot="sheet-overlay"][data-state="open"] {
+  animation: fade-in-soft var(--dur-open) var(--ease-out-soft);
+}
+[data-slot="dialog-overlay"][data-state="closed"],
+[data-slot="sheet-overlay"][data-state="closed"] {
+  animation: fade-out-soft var(--dur-close) var(--ease-out-soft) forwards;
+}
+[data-slot="sheet-content"][data-state="open"] {
+  animation: sheet-in var(--dur-open) var(--ease-out-soft);
+}
+[data-slot="sheet-content"][data-state="closed"] {
+  animation: sheet-out var(--dur-close) var(--ease-in-quick) forwards;
+}
+
+@keyframes dlg-in {
+  from { opacity: 0; scale: var(--modal-scale); }
+}
+@keyframes dlg-out {
+  to { opacity: 0; scale: var(--modal-scale); }
+}
+@keyframes fade-in-soft {
+  from { opacity: 0; }
+}
+@keyframes fade-out-soft {
+  to { opacity: 0; }
+}
+@keyframes sheet-in {
+  from { transform: translateX(100%); }
+}
+@keyframes sheet-out {
+  to { transform: translateX(100%); }
+}
+
+/* Reveal ao rolar: só existe com JS (classe .js no <html>), então sem JS
+   o conteúdo aparece normalmente. Anima uma vez, escalonamento de 40 ms.
+   Uso: <div data-reveal style="--i: 2"> */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(var(--distance-enter));
+  filter: blur(var(--blur-enter));
+  transition:
+    opacity var(--dur-enter-text) var(--ease-out-soft),
+    transform var(--dur-enter-text) var(--ease-out-soft),
+    filter var(--dur-enter-text) var(--ease-out-soft);
+  transition-delay: calc(var(--i, 0) * var(--dur-stagger));
+}
+.js [data-reveal].is-shown {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* Botão pressionado */
+.press {
+  transition:
+    transform var(--dur-press) var(--ease-out-soft),
+    background-color var(--dur-hover-fast) var(--ease-out-soft),
+    color var(--dur-hover-fast) var(--ease-out-soft),
+    border-color var(--dur-hover-fast) var(--ease-out-soft);
+}
+.press:active {
+  transform: scale(var(--press-scale));
+}
+
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+  }
+  .bg-faixa :focus-visible,
+  .bg-barra-baixa :focus-visible { outline-color: #fff; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.js) { scroll-behavior: smooth; }
+}
+
+/* Movimento reduzido: some deslocamento, escala, desfoque e sequência;
+   ficam esmaecimentos curtos, cor e sublinhado. */
+@media (prefers-reduced-motion: reduce) {
+  .press:active { transform: none; }
+  .js [data-reveal] {
+    transform: none;
+    filter: none;
+    transition: opacity var(--dur-enter) var(--ease-out-soft);
+    transition-delay: 0ms;
+  }
+  [data-slot="dialog-content"][data-state="open"],
+  [data-slot="sheet-content"][data-state="open"] { animation: fade-in-soft var(--dur-open) var(--ease-out-soft); }
+  [data-slot="dialog-content"][data-state="closed"],
+  [data-slot="sheet-content"][data-state="closed"] { animation: fade-out-soft var(--dur-close) var(--ease-out-soft) forwards; }
+  [data-slot="sheet-content"][data-state="open"] .menu-item { animation: fade-in-soft var(--dur-open) var(--ease-out-soft) both; }
+}
+
+html { -webkit-text-size-adjust: 100%; }
+body { text-rendering: optimizeLegibility; }
+
+.titulo-pagina {
+  font-size: clamp(2.1rem, 1.4rem + 3vw, 3.25rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  font-weight: 650;
+  text-wrap: balance;
+}
+.titulo-hero {
+  font-size: clamp(2.1rem, 1.3rem + 3vw, 3.25rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  font-weight: 650;
+  text-wrap: balance;
+}
+.rotulo-topo {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+/* --- Cabeçalho: fundo e borda aparecem ao sair do topo --- */
+.cabecalho { isolation: isolate; }
+.cabecalho::before,
+.cabecalho::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.cabecalho::before { background: color-mix(in oklab, var(--card) 92%, transparent); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+.cabecalho::after { inset: auto 0 0 0; height: 1px; background: var(--border); opacity: 0; transition: opacity var(--dur-header) var(--ease-out-soft); }
+.cabecalho[data-rolado="true"]::after { opacity: 1; }
+
+.link-nav {
+  transition: color var(--dur-hover-fast) var(--ease-out-soft), background-color var(--dur-hover-fast) var(--ease-out-soft);
+}
+.link-nav:hover { color: var(--foreground); background-color: var(--accent); }
+.link-nav[aria-current="page"] { color: var(--primary); font-weight: 600; }
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-slot="sheet-content"][data-state="open"] .menu-item {
+    animation: item-entra var(--dur-enter) var(--ease-out-soft) both;
+    animation-delay: calc(80ms + var(--i, 0) * var(--dur-stagger));
+  }
+}
+@keyframes item-entra {
+  from { opacity: 0; transform: translateX(var(--distance-enter)); filter: blur(var(--blur-enter)); }
+}
+.link-menu { transition: background-color var(--dur-hover-fast) var(--ease-out-soft), color var(--dur-hover-fast) var(--ease-out-soft); }
+.link-menu:hover, .link-menu:active { background-color: var(--accent); }
+.link-menu[aria-current="page"] { color: var(--primary); }
+
+/* Sem JavaScript: o menu do celular não existe, então a navegação aparece numa linha abaixo da logo */
+html:not(.js) .js-so { display: none !important; }
+html:not(.js) .menu-celular { display: none; }
+html:not(.js) .cabecalho-linha { flex-wrap: wrap; height: auto; padding-block: 0.5rem; }
+html:not(.js) .nav-desktop { display: block; width: 100%; }
+html:not(.js) .nav-desktop ul { flex-wrap: wrap; }
+
+/* --- Botões --- */
+.botao-primario { background: var(--primary); color: var(--primary-foreground); }
+.botao-primario:hover { background: var(--primary-hover); }
+.botao-contorno { border: 1px solid var(--primary); color: var(--primary); }
+.botao-contorno:hover { background: var(--primary); color: var(--primary-foreground); }
+.botao-contorno-neutro { border: 1px solid var(--input); color: var(--foreground); }
+.botao-contorno-neutro:hover { border-color: var(--primary); background: var(--accent); }
+.botao-faixa { border: 1px solid var(--faixa-borda); color: var(--faixa-muted); }
+.botao-faixa:hover { border-color: var(--faixa-foreground); color: var(--faixa-foreground); }
+
+.link-texto {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: color-mix(in oklab, currentColor 45%, transparent);
+  transition: text-decoration-color var(--dur-hover-fast) var(--ease-out-soft), color var(--dur-hover-fast) var(--ease-out-soft);
+}
+.link-texto:hover { text-decoration-color: currentColor; }
+.link-faixa { color: var(--faixa-muted); }
+.link-faixa:hover { color: var(--faixa-foreground); }
+
+/* --- Campos de formulário: borda e anel em 150 ms; erro treme 6 px --- */
+.campo-entrada {
+  display: block;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--foreground);
+  background: var(--background);
+  border: 1px solid var(--input);
+  border-radius: var(--radius-md);
+  transition:
+    border-color var(--dur-hover-fast) var(--ease-out-soft),
+    box-shadow var(--dur-hover-fast) var(--ease-out-soft);
+}
+.campo-entrada::placeholder { color: var(--muted-foreground); opacity: 1; }
+.campo-entrada:hover { border-color: var(--foreground); }
+.campo-entrada:focus-visible { outline: none; border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in oklab, var(--ring) 35%, transparent); }
+.campo-entrada[aria-invalid="true"] { border-color: var(--destructive); }
+.campo-entrada[aria-invalid="true"]:focus-visible { box-shadow: 0 0 0 3px color-mix(in oklab, var(--destructive) 30%, transparent); }
+select.campo-entrada { appearance: none; padding-right: 2.5rem; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23868e96' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.75rem center; }
+textarea.campo-entrada { min-height: 7.5rem; resize: vertical; }
+.campo-rotulo { display: block; margin-bottom: 0.375rem; font-size: 0.9375rem; font-weight: 500; }
+.campo-tremida { animation: tremida var(--dur-shake) var(--ease-out-soft); }
+@keyframes tremida {
+  20% { transform: translateX(calc(var(--shake-distance) * -1)); }
+  40% { transform: translateX(var(--shake-distance)); }
+  60% { transform: translateX(calc(var(--shake-distance) * -0.5)); }
+  80% { transform: translateX(calc(var(--shake-distance) * 0.5)); }
+}
+.mensagem-erro { min-height: 1.25rem; margin-top: 0.25rem; font-size: 0.875rem; color: var(--destructive); opacity: 0; transition: opacity var(--dur-hover-fast) var(--ease-out-soft); }
+.mensagem-erro[data-visivel="true"] { opacity: 1; }
+.na-faixa .mensagem-erro { color: var(--faixa-erro); }
+.resumo-erro { font-size: 0.9375rem; font-weight: 500; color: var(--destructive); }
+.resumo-erro:empty { display: none; }
+
+/* Opções de pagamento (radios em forma de botão) */
+.opcao-pagamento { position: relative; }
+.opcao-pagamento input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; margin: 0; }
+.opcao-pagamento span {
+  display: flex; align-items: center; justify-content: center; min-height: 2.75rem; padding: 0.5rem 1rem;
+  border: 1px solid var(--input); border-radius: var(--radius-md); font-size: 0.9375rem; font-weight: 500; text-align: center;
+  transition: background-color var(--dur-hover-fast) var(--ease-out-soft), color var(--dur-hover-fast) var(--ease-out-soft), border-color var(--dur-hover-fast) var(--ease-out-soft);
+}
+.opcao-pagamento input:checked + span { background: var(--primary); border-color: var(--primary); color: var(--primary-foreground); }
+.opcao-pagamento input:focus-visible + span { outline: 2px solid var(--ring); outline-offset: 3px; }
+
+/* --- Carrossel: slides empilhados, o ativo aparece (só opacity). Sem JS, todos visíveis em coluna --- */
+.carrossel-palco { position: relative; overflow: hidden; background: var(--faixa); }
+.carrossel-slide { position: relative; aspect-ratio: 3 / 2; }
+.js .carrossel-palco { aspect-ratio: 3 / 2; }
+.js .carrossel-slide {
+  position: absolute; inset: 0; opacity: 0; visibility: hidden;
+  transition: opacity var(--dur-slide) var(--ease-out-soft), visibility 0s linear var(--dur-slide);
+}
+.js .carrossel-slide[data-ativo="true"] { opacity: 1; visibility: visible; transition-delay: 0s; }
+.carrossel-botao {
+  display: inline-flex; align-items: center; justify-content: center; width: 2.75rem; height: 2.75rem; border-radius: 999px;
+  background: rgb(0 0 0 / 0.6); color: #fff;
+  transition: background-color var(--dur-hover-fast) var(--ease-out-soft), transform var(--dur-press) var(--ease-out-soft);
+}
+.carrossel-botao:hover { background: rgb(0 0 0 / 0.8); }
+.carrossel-botao:active { transform: scale(var(--press-scale)); }
+.carrossel-ponto { display: inline-flex; align-items: center; justify-content: center; width: 2.75rem; height: 2.75rem; }
+.carrossel-ponto::before {
+  content: ""; width: 0.75rem; height: 0.75rem; border-radius: 999px; background: rgb(255 255 255 / 0.55); border: 1px solid rgb(0 0 0 / 0.5);
+  transition: transform var(--dur-hover-fast) var(--ease-out-soft), background-color var(--dur-hover-fast) var(--ease-out-soft);
+}
+.carrossel-ponto[aria-current="true"]::before { background: #fff; transform: scale(1.25); }
+@media (prefers-reduced-motion: reduce) {
+  .carrossel-ponto[aria-current="true"]::before { transform: none; }
+  .carrossel-botao:active { transform: none; }
+}
+.icone-pausa, .icone-play { display: none; }
+.carrossel-pausa[data-estado="tocando"] .icone-pausa { display: block; }
+.carrossel-pausa[data-estado="parado"] .icone-play { display: block; }
+
+/* --- Perguntas frequentes (<details> nativo, sem JS) ---
+   Altura 250 ms, conteúdo com opacity + blur 2 px. A altura anima onde o navegador
+   suporta ::details-content; nos outros abre direto. */
+:root { interpolate-size: allow-keywords; }
+.detalhe { border-bottom: 1px solid var(--border); }
+.detalhe-titulo {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  min-height: 3.5rem; padding: 1rem 0; font-size: 1.125rem; font-weight: 500;
+  color: var(--foreground); cursor: pointer; list-style: none;
+  transition: color var(--dur-hover-fast) var(--ease-out-soft);
+}
+.detalhe-titulo::-webkit-details-marker { display: none; }
+.detalhe-titulo:hover { color: var(--primary); }
+.detalhe-seta { flex-shrink: 0; color: var(--muted-foreground); transition: rotate var(--dur-layout) var(--ease-out-soft); }
+.detalhe[open] .detalhe-seta { rotate: 180deg; }
+.detalhe::details-content {
+  block-size: 0; overflow: clip;
+  transition: block-size var(--dur-layout) var(--ease-out-soft), content-visibility var(--dur-layout) allow-discrete;
+}
+.detalhe[open]::details-content { block-size: auto; }
+.detalhe-corpo {
+  padding-bottom: 1.5rem; line-height: 1.65; color: var(--muted-foreground);
+  opacity: 0; filter: blur(var(--blur-enter));
+  transition: opacity var(--dur-layout) var(--ease-out-soft), filter var(--dur-layout) var(--ease-out-soft);
+}
+.detalhe[open] .detalhe-corpo { opacity: 1; filter: none; }
+@media (prefers-reduced-motion: reduce) {
+  .detalhe-corpo { filter: none; }
+}
+
+/* --- Vantagens, planos e eventos --- */
+.vantagem { transition: transform var(--dur-hover) var(--ease-out-soft); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .vantagem:hover { transform: translateY(var(--lift)); }
+}
+.lista-plano li + li { border-top: 1px solid var(--border); }
+.lista-plano li { padding: 0.875rem 0.25rem; }
+.sombra-suave { box-shadow: 0 2px 4px 0 rgb(0 0 0 / 0.05), 0 4px 8px 0 rgb(0 0 0 / 0.03); }
+[data-theme="dark"] .sombra-suave { box-shadow: 0 2px 4px 0 rgb(0 0 0 / 0.35), 0 4px 8px 0 rgb(0 0 0 / 0.25); }
+.foto-moldura { overflow: hidden; border-radius: var(--radius); }
+.foto-moldura img { transition: scale var(--dur-hover) var(--ease-out-soft); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .foto-moldura:hover img { scale: 1.03; }
+}
+.tabela-eventos tbody tr { transition: background-color var(--dur-hover-fast) var(--ease-out-soft); }
+.tabela-eventos tbody tr:hover { background: var(--accent); }
+
+@media print {
+  .js [data-reveal] { opacity: 1 !important; transform: none !important; filter: none !important; }
+  .cabecalho { position: static; }
+}
+
+/* ------------------------------------------------------------------
+   Tema claro/escuro: botão de troca e transição
+------------------------------------------------------------------- */
+.tema-botao { position: relative; }
+.tema-icone {
+  position: absolute; inset: 0; margin: auto; opacity: 0;
+  transform: rotate(-90deg) scale(0.6);
+  transition: opacity var(--dur-close) var(--ease-out-soft), transform var(--dur-close) var(--ease-out-soft);
+}
+.tema-icone-lua { opacity: 1; transform: none; transition-duration: var(--dur-open); }
+[data-theme="dark"] .tema-icone-lua { opacity: 0; transform: rotate(-90deg) scale(0.6); transition-duration: var(--dur-close); }
+[data-theme="dark"] .tema-icone-sol { opacity: 1; transform: none; transition-duration: var(--dur-open); }
+@media (prefers-reduced-motion: reduce) {
+  .tema-icone, .tema-icone-lua, [data-theme="dark"] .tema-icone-lua, [data-theme="dark"] .tema-icone-sol { transform: none; transition-duration: var(--dur-close); }
+}
+
+.tema-trocando,
+.tema-trocando *:not(.tema-icone):not([data-reveal]):not(.carrossel-slide),
+.tema-trocando *::before,
+.tema-trocando *::after {
+  transition:
+    background-color var(--dur-layout) var(--ease-out-soft),
+    color var(--dur-layout) var(--ease-out-soft),
+    border-color var(--dur-layout) var(--ease-out-soft),
+    fill var(--dur-layout) var(--ease-out-soft) !important;
+}
+
+/* Movimento reduzido (fim do arquivo, para vencer as regras de base acima) */
+@media (prefers-reduced-motion: reduce) {
+  .campo-tremida { animation: none; }
+  .js .carrossel-slide { transition-duration: 250ms, 0s; transition-delay: 0s, 250ms; }
+  .js .carrossel-slide[data-ativo="true"] { transition-delay: 0s, 0s; }
+}

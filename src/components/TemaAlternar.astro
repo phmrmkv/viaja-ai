@@ -1,0 +1,62 @@
+---
+interface Props {
+  rotuloEscuro?: string;
+  rotuloClaro?: string;
+}
+
+const { rotuloEscuro = 'Mudar para o tema escuro', rotuloClaro = 'Mudar para o tema claro' } = Astro.props;
+---
+
+<button
+  type="button"
+  class="tema-botao link-nav js-so inline-flex size-11 shrink-0 items-center justify-center rounded-full text-foreground/75"
+  aria-label={rotuloEscuro}
+  data-tema-botao
+  data-rotulo-escuro={rotuloEscuro}
+  data-rotulo-claro={rotuloClaro}
+>
+  <svg class="tema-icone tema-icone-lua" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+  </svg>
+  <svg class="tema-icone tema-icone-sol" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+  </svg>
+</button>
+
+<script>
+  const raiz = document.documentElement;
+  const botao = document.querySelector<HTMLButtonElement>('[data-tema-botao]');
+  const CLARO = '#f8f9fa';
+  const ESCURO = '#12161a';
+
+  if (botao) {
+    const sincronizar = () => {
+      const escuro = raiz.dataset.theme === 'dark';
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', escuro ? ESCURO : CLARO);
+      botao.setAttribute('aria-label', (escuro ? botao.dataset.rotuloClaro : botao.dataset.rotuloEscuro) ?? '');
+    };
+    sincronizar();
+    new MutationObserver(sincronizar).observe(raiz, { attributes: true, attributeFilter: ['data-theme'] });
+
+    let temporizador: number | undefined;
+    botao.addEventListener('click', () => {
+      const proximo = raiz.dataset.theme === 'dark' ? 'light' : 'dark';
+      raiz.classList.add('tema-trocando');
+      raiz.dataset.theme = proximo;
+      try {
+        localStorage.setItem('caravan-tema', proximo);
+      } catch {
+        /* sem armazenamento: a troca vale só nesta visita */
+      }
+      sincronizar();
+      window.clearTimeout(temporizador);
+      const duracao = parseFloat(getComputedStyle(raiz).getPropertyValue('--dur-layout')) || 250;
+      temporizador = window.setTimeout(() => raiz.classList.remove('tema-trocando'), duracao + 50);
+    });
+
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'caravan-tema' && (e.newValue === 'dark' || e.newValue === 'light')) raiz.dataset.theme = e.newValue;
+    });
+  }
+</script>

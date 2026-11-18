@@ -1,0 +1,11 @@
+---
+// Logo original do Caravan (img/caravan.svg) embutida, para herdar a cor do texto nos dois temas.
+import bruto from '@/assets/caravan.svg?raw';
+
+interface Props {
+  class?: string;
+}
+const svg = bruto.replace(/<svg /, '<svg fill="currentColor" aria-hidden="true" focusable="false" class="h-7 w-auto" ');
+---
+
+<span class:list={['inline-flex', Astro.props.class]} set:html={svg} />

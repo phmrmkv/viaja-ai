@@ -1,0 +1,37 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import CartaoPlano from '@/components/CartaoPlano.astro';
+import { planos } from '@/data';
+---
+
+<Layout
+  title="Escolha o plano | Caravan"
+  description="Planos Gold e Platinum do Caravan: dias de viagem, destinos e preços de exemplo. Site de demonstração."
+  atual="/planos/"
+>
+  <section class="mx-auto max-w-6xl px-4 sm:px-6" aria-labelledby="titulo-planos">
+    <div class="my-12 text-center" data-reveal>
+      <p class="rotulo-topo">Seu plano, sua viagem</p>
+      <h1 id="titulo-planos" class="titulo-pagina mt-2 text-primary">Escolha o plano</h1>
+    </div>
+    <div class="mx-auto grid max-w-4xl gap-6 md:grid-cols-2">
+      <div data-reveal><CartaoPlano plano={planos.gold} comprar idSelect="cidade-gold" /></div>
+      <div data-reveal style="--i: 1"><CartaoPlano plano={planos.platinum} comprar idSelect="cidade-platinum" /></div>
+    </div>
+    <p class="mx-auto mt-6 max-w-4xl text-center text-sm text-muted-foreground">Preços e condições de exemplo: este é um site de demonstração.</p>
+  </section>
+</Layout>
+
+<script>
+  // A cidade escolhida acompanha o link de compra e vai preencher a inscrição.
+  document.querySelectorAll<HTMLSelectElement>('[data-select-cidade]').forEach((sel) => {
+    const link = document.querySelector<HTMLAnchorElement>(`[data-link-compra="${sel.dataset.selectCidade}"]`);
+    if (!link) return;
+    sel.addEventListener('change', () => {
+      const url = new URL(link.getAttribute('href') ?? '', location.origin);
+      if (sel.value) url.searchParams.set('cidade', sel.value);
+      else url.searchParams.delete('cidade');
+      link.setAttribute('href', url.pathname + url.search);
+    });
+  });
+</script>

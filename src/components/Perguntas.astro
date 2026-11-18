@@ -1,0 +1,37 @@
+---
+import { perguntas } from '@/data';
+
+interface Props {
+  /** Nível do título de cada pergunta não é usado: o resumo do <details> é o próprio controle. */
+  abrirPrimeira?: boolean;
+}
+const { abrirPrimeira = true } = Astro.props;
+---
+
+<section class="mx-auto max-w-6xl px-4 sm:px-6" aria-labelledby="titulo-perguntas">
+  <div class="my-12 text-center" data-reveal>
+    <p class="rotulo-topo">Ainda está com dúvidas?</p>
+    <h2 id="titulo-perguntas" class="titulo-pagina mt-2 text-primary">Perguntas Frequentes</h2>
+  </div>
+  <div class="mx-auto max-w-2xl border-t border-border" data-reveal>
+    {
+      perguntas.map((p, i) => (
+        <details class="detalhe" open={abrirPrimeira && i === 0} name="perguntas">
+          <summary class="detalhe-titulo">
+            <span>{p.q}</span>
+            <svg class="detalhe-seta" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </summary>
+          <div class="detalhe-corpo">
+            <p>{p.a}</p>
+          </div>
+        </details>
+      ))
+    }
+  </div>
+  <div class="my-10 text-center" data-reveal>
+    <p class="rotulo-topo mb-3">Fale conosco para mais dúvidas</p>
+    <a href="/contato/" class="press botao-primario inline-flex min-h-12 items-center rounded-lg px-6 text-lg font-medium">Entre em contato</a>
+  </div>
+</section>

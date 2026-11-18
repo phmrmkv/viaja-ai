@@ -1,0 +1,105 @@
+---
+import '@fontsource-variable/inter';
+import '@/styles/global.css';
+import Cabecalho from '@/components/Cabecalho.astro';
+import Rodape from '@/components/Rodape.astro';
+import Dialogos from '@/components/Dialogos';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Caminho da página com barras, como "/planos/" (marca o item atual do menu). */
+  atual: string;
+  noindex?: boolean;
+}
+
+const { title, description, atual, noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const imagem = new URL('/og-image.jpg', Astro.site);
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      // Tema antes da primeira pintura (sem piscar): preferência salva ou, sem ela, a do sistema.
+      (function () {
+        var d = document.documentElement;
+        var m = window.matchMedia('(prefers-color-scheme: dark)');
+        function salvo() {
+          try { var v = localStorage.getItem('caravan-tema'); return v === 'dark' || v === 'light' ? v : null; } catch (e) { return null; }
+        }
+        d.dataset.theme = salvo() || (m.matches ? 'dark' : 'light');
+        function mudou(e) {
+          if (!salvo()) d.dataset.theme = e.matches ? 'dark' : 'light';
+        }
+        m.addEventListener('change', mudou);
+        d.classList.add('js');
+      })();
+    </script>
+    <meta name="theme-color" content="#f8f9fa" />
+    <script is:inline>
+      if (document.documentElement.dataset.theme === 'dark') document.querySelector('meta[name="theme-color"]').setAttribute('content', '#12161a');
+    </script>
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="Caravan" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imagem} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Caravan: viagens para a Califórnia, Paris e Dublin (site de demonstração)" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+  </head>
+  <body>
+    <a
+      href="#conteudo"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
+      >Pular para o conteúdo</a
+    >
+    <Cabecalho atual={atual} />
+    <main id="conteudo" tabindex="-1" class="outline-none">
+      <slot />
+    </main>
+    <Rodape />
+    <Dialogos client:load />
+    <script>
+      import '@/scripts/interacoes';
+      import '@/scripts/formularios';
+    </script>
+    <script is:inline>
+      // Reveal ao rolar. Inline de propósito: se fosse um arquivo separado e ele falhasse,
+      // o conteúdo com data-reveal ficaria invisível. data-reveal vai em blocos, nunca em seções inteiras.
+      (function () {
+        var alvos = document.querySelectorAll('[data-reveal]');
+        if (!('IntersectionObserver' in window)) {
+          alvos.forEach(function (el) { el.classList.add('is-shown'); });
+          return;
+        }
+        var io = new IntersectionObserver(
+          function (entradas) {
+            entradas.forEach(function (e) {
+              if (e.isIntersecting) {
+                e.target.classList.add('is-shown');
+                io.unobserve(e.target);
+              }
+            });
+          },
+          { threshold: 0, rootMargin: '0px 0px -8% 0px' },
+        );
+        alvos.forEach(function (el) { io.observe(el); });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,48 @@
+---
+import Logo from '@/components/Logo.astro';
+import TemaAlternar from '@/components/TemaAlternar.astro';
+import MenuMobile from '@/components/MenuMobile';
+import { paginas } from '@/data';
+
+interface Props {
+  atual: string;
+}
+const { atual } = Astro.props;
+---
+
+<header class="cabecalho sticky top-0 z-40 text-foreground" data-cabecalho>
+  <div class="cabecalho-linha mx-auto flex h-[4.25rem] max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
+    <a href="/" class="press -ml-1 flex min-h-11 items-center rounded-md px-1" aria-label="Caravan, página inicial">
+      <Logo />
+    </a>
+    <nav aria-label="Principal" class="nav-desktop hidden md:block">
+      <ul class="flex items-center gap-1 text-[0.9375rem]">
+        {
+          paginas.map((l) => (
+            <li>
+              <a
+                href={l.href}
+                class="link-nav inline-flex min-h-11 items-center rounded-full px-3 text-foreground/80"
+                aria-current={atual === l.href ? 'page' : undefined}>{l.texto}</a>
+            </li>
+          ))
+        }
+        <li class="js-so">
+          <button type="button" class="link-nav inline-flex min-h-11 items-center rounded-full px-3 text-foreground/80" data-abrir-login>Login</button>
+        </li>
+        <li>
+          <a
+            href="/inscricao/"
+            class="press botao-contorno ml-1 inline-flex min-h-11 items-center rounded-lg px-4 text-[0.9375rem] font-medium"
+            aria-current={atual === '/inscricao/' ? 'page' : undefined}>Inscreva-se</a>
+        </li>
+      </ul>
+    </nav>
+    <div class="flex items-center gap-1">
+      <TemaAlternar />
+      <div class="menu-celular md:hidden">
+        <MenuMobile client:media="(max-width: 767px)" links={paginas} atual={atual} />
+      </div>
+    </div>
+  </div>
+</header>
